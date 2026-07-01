@@ -1,7 +1,3 @@
-// Vercel Serverless Function for AI chat with Gemini 2.5-flash
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
 // System Instructions to guide the AI responder
 const SYSTEM_INSTRUCTION = `You are ResQ Assistant, an empathetic and reliable AI disaster response guide. 
 Answer concisely (maximum 3-4 sentences) and prioritize safety. 
@@ -10,6 +6,10 @@ If asked about active alerts, explain that you are monitoring NDMA SACHET live w
 If the user's query is in a regional Indian language (like Hindi, Tamil, Telugu, etc.), reply in the same language.`;
 
 export default async function handler(req, res) {
+  // Read API key dynamically (fixes ESM import order timing)
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');

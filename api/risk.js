@@ -1,9 +1,6 @@
 // Vercel Serverless Function to calculate localized AI Risk & Safety Score
 import alertsHandler from './alerts.js';
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
 // Haversine formula to compute distance in km between two points
 const getDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371; // Earth radius
@@ -17,6 +14,9 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
 };
 
 export default async function handler(req, res) {
+  // Read API key dynamically (fixes ESM import order timing)
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');

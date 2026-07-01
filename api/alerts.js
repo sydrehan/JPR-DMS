@@ -1,7 +1,5 @@
 // Vercel Serverless Function to fetch and normalize NDMA SACHET Live Alerts
 const SACHET_API_URL = 'https://sachet.ndma.gov.in/cap_public_website/FetchAllAlertDetails';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 // In-Memory Cache (will persist across serverless reuse)
 let cache = {
@@ -73,6 +71,8 @@ const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutM
 
 // AI Batch Translation and Summarization
 const translateAndSummarizeAlerts = async (alerts) => {
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
   if (!GEMINI_API_KEY) return alerts;
 
   try {
