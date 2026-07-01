@@ -4,6 +4,15 @@ import alertsTextHandler from './api/alerts-text.js';
 import chatHandler from './api/chat.js';
 import riskHandler from './api/risk.js';
 
+// Load local .env file variables automatically (Node.js 20.6+)
+if (process.loadEnvFile) {
+    try {
+        process.loadEnvFile();
+    } catch (e) {
+        // Safe to ignore if .env file is missing or unreadable
+    }
+}
+
 const PORT = 3000;
 
 const server = http.createServer(async (req, res) => {
