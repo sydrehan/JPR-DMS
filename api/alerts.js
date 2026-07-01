@@ -41,7 +41,7 @@ const getSafetyGuide = (type) => {
 };
 
 // Fetch Helper with timeout and retries
-const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutMs = 8000) => {
+const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutMs = 15000) => {
   for (let attempt = 1; attempt <= retries; attempt++) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -49,7 +49,11 @@ const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutM
     try {
       const response = await fetch(url, {
         ...options,
-        signal: controller.signal
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          ...(options.headers || {})
+        }
       });
       clearTimeout(id);
 

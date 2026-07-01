@@ -1,13 +1,18 @@
 import http from 'http';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import alertsHandler from './api/alerts.js';
 import alertsTextHandler from './api/alerts-text.js';
 import chatHandler from './api/chat.js';
 import riskHandler from './api/risk.js';
 
-// Load local .env file variables automatically (Node.js 20.6+)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load local .env file variables automatically with absolute path
 if (process.loadEnvFile) {
     try {
-        process.loadEnvFile();
+        process.loadEnvFile(join(__dirname, '.env'));
     } catch (e) {
         // Safe to ignore if .env file is missing or unreadable
     }
