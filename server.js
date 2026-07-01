@@ -1,13 +1,15 @@
 import http from 'http';
 import alertsHandler from './api/alerts.js';
 import alertsTextHandler from './api/alerts-text.js';
+import chatHandler from './api/chat.js';
+import riskHandler from './api/risk.js';
 
 const PORT = 3000;
 
 const server = http.createServer(async (req, res) => {
     // Enable CORS for local testing
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
@@ -32,15 +34,41 @@ const server = http.createServer(async (req, res) => {
         res.end(body);
         return res;
     };
+
+    // Parse URL query parameters
+    const urlObj = new URL(req.url, `http://${req.headers.host}`);
+    req.query = Object.fromEntries(urlObj.searchParams);
+
+    // Parse JSON body for POST requests
+    req.body = {};
+    if (req.method === 'POST') {
+        const buffers = [];
+        for await (const chunk of req) {
+            buffers.push(chunk);
+        }
+        const data = Buffer.concat(buffers).toString();
+        try {
+            if (data) {
+                req.body = JSON.parse(data);
+            }
+        } catch (e) {
+            console.warn("Failed to parse JSON body:", e.message);
+        }
+    }
     
     // Simple router
-    if (req.url === '/api/alerts') {
+    const pathname = urlObj.pathname;
+    if (pathname === '/api/alerts') {
         await alertsHandler(req, res);
-    } else if (req.url === '/api/alerts-text') {
+    } else if (pathname === '/api/alerts-text') {
         await alertsTextHandler(req, res);
+    } else if (pathname === '/api/chat') {
+        await chatHandler(req, res);
+    } else if (pathname === '/api/risk') {
+        await riskHandler(req, res);
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Not Found. Try /api/alerts or /api/alerts-text');
+        res.end('Not Found. Try /api/alerts, /api/alerts-text, /api/chat, or /api/risk');
     }
 });
 
@@ -48,5 +76,8 @@ server.listen(PORT, () => {
     console.log(`\n✅ Local API Server running at:`);
     console.log(`   - JSON Alerts: http://localhost:${PORT}/api/alerts`);
     console.log(`   - Text Alerts: http://localhost:${PORT}/api/alerts-text`);
+    console.log(`   - AI Chat: http://localhost:${PORT}/api/chat`);
+    console.log(`   - AI Risk: http://localhost:${PORT}/api/risk`);
     console.log("   (This mimics how Vercel will run your API in production)\n");
 });
+
