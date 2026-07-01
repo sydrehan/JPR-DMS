@@ -3,38 +3,46 @@ import { ShieldCheck, AlertTriangle, Siren, Cloud, Sun, Loader2 } from 'lucide-r
 import { useLocation } from '../../context/LocationContext';
 import { useTranslation } from 'react-i18next';
 
-export const SafetyStatus = ({ alerts = [] }) => {
+export const SafetyStatus = ({ level = 'safe', alerts = [] }) => {
   const { location } = useLocation();
   const { t } = useTranslation();
   const [weather, setWeather] = useState(null);
   const [locationName, setLocationName] = useState("Locating...");
-  const [aiRisk, setAiRisk] = useState({
-    safetyScore: 100,
-    dangerLevel: 'safe',
-    commentary: 'Scanning regional warnings...',
-    minDistance: null,
-    nearestAlertTitle: null
-  });
+  const [status, setStatus] = useState({ level: 'safe', alert: null });
 
-  // Fetch AI Risk and Score from Backend
+  // Haversine Distance Formula (km)
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const deg2rad = (deg) => {
+    return deg * (Math.PI / 180);
+  };
+
+  // Check for nearby alerts
   useEffect(() => {
-    if (location) {
-      fetch(`/api/risk?lat=${location.lat}&lng=${location.lng}`)
-        .then(res => res.json())
-        .then(data => {
-          setAiRisk(data);
-        })
-        .catch(err => {
-          console.error("AI Risk fetch failed", err);
-          // Local fallback computation if API fails
-          setAiRisk({
-            safetyScore: 100,
-            dangerLevel: 'safe',
-            commentary: 'Scan complete. Local alert monitoring is active.',
-            minDistance: null,
-            nearestAlertTitle: null
-          });
-        });
+    if (location && alerts.length > 0) {
+      const nearbyCritical = alerts.find(a => {
+        if (!a.lat || !a.lng) return false;
+        const dist = calculateDistance(location.lat, location.lng, a.lat, a.lng);
+        return dist <= 20 && (a.severity === 'critical' || a.severity === 'high');
+      });
+
+      if (nearbyCritical) {
+        setStatus({ level: 'danger', alert: nearbyCritical });
+      } else {
+        setStatus({ level: 'safe', alert: null });
+      }
+    } else {
+        if (location) setStatus({ level: 'safe', alert: null });
     }
   }, [location, alerts]);
 
@@ -92,37 +100,31 @@ export const SafetyStatus = ({ alerts = [] }) => {
       bg: 'bg-[#0f172a]', 
       iconBg: 'bg-green-500', 
       icon: ShieldCheck,
-      title: 'YOU ARE SECURE',
-      sub: locationName,
-      textColor: 'text-white'
-    },
-    warning: {
-      bg: 'bg-amber-950/90 border border-amber-500/20',
-      iconBg: 'bg-amber-500',
-      icon: AlertTriangle,
-      title: 'REGIONAL ALERT',
-      sub: locationName,
-      textColor: 'text-white'
-    },
-    alert: {
-      bg: 'bg-amber-950/90 border border-amber-500/20',
-      iconBg: 'bg-amber-500',
-      icon: AlertTriangle,
-      title: 'REGIONAL ALERT',
-      sub: locationName,
+      title: t('status.safe'),
+      sub: (
+        <div className="flex flex-col">
+            <span className="opacity-80 text-xs">{t('status.safe_desc')}</span>
+            <span className="text-white font-bold text-base leading-tight mt-0.5">{locationName}</span>
+        </div>
+      ),
       textColor: 'text-white'
     },
     danger: {
-      bg: 'bg-red-950 border border-red-500/20',
+      bg: 'bg-red-900',
       iconBg: 'bg-red-600',
       icon: Siren,
-      title: 'CRITICAL HAZARD',
-      sub: locationName,
+      title: t('status.danger_title'),
+      sub: (
+        <div className="flex flex-col">
+             <span className="opacity-80 text-xs">{t('status.danger_desc')}</span>
+             <span className="text-white font-bold text-base leading-tight mt-0.5">{status.alert?.title || t('status.unknown_danger')}</span>
+        </div>
+      ),
       textColor: 'text-white'
     }
   };
 
-  const current = config[aiRisk.dangerLevel] || config.safe;
+  const current = config[status.level] || config.safe;
   const Icon = current.icon;
   const weatherInfo = weather ? getWeatherDetails(weather.current.code) : { label: 'Loading...', icon: Loader2 };
   const WeatherIcon = weatherInfo.icon;
@@ -131,31 +133,19 @@ export const SafetyStatus = ({ alerts = [] }) => {
     <div className={`w-full rounded-3xl px-6 py-5 ${current.bg} text-white flex flex-col md:flex-row items-center justify-between shadow-xl relative overflow-hidden min-h-[180px]`}>
       
       {/* Left: Status */}
-      <div className="flex items-center gap-5 z-10 w-full md:w-auto flex-1">
+      <div className="flex items-center gap-5 z-10 w-full md:w-auto">
         <div className={`w-16 h-16 rounded-full ${current.iconBg} flex items-center justify-center shrink-0 shadow-lg shadow-black/20 animate-pulse`}>
           <Icon className="w-8 h-8 text-white" />
         </div>
-        <div className="flex-1">
-          <div className="text-slate-400 text-xs font-semibold mb-1 flex items-start gap-2">
+        <div>
+          <div className="text-slate-400 text-xs font-medium mb-1 flex items-start gap-2">
              <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1 shrink-0"></span> 
-             <div className="flex flex-col">
-                <span className="opacity-80 text-xs">Current Location</span>
-                <span className="text-white font-bold text-base leading-tight mt-0.5">{current.sub}</span>
-             </div>
+             {current.sub}
           </div>
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-none mb-2 py-1 flex items-center gap-3">
-            {current.title}
-            <span className={`text-xs px-2 py-1 rounded-lg font-bold border ${
-              aiRisk.safetyScore > 80 ? 'bg-green-500/20 border-green-500 text-green-300' :
-              aiRisk.safetyScore > 50 ? 'bg-amber-500/20 border-amber-500 text-amber-300' :
-              'bg-red-500/20 border-red-500 text-red-300'
-            }`}>
-              AI Index: {aiRisk.safetyScore}%
-            </span>
-          </h2>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed italic bg-white/5 p-2 rounded-lg border border-white/5">
-            "{aiRisk.commentary}"
-          </p>
+          <h2 className="text-2xl md:text-4xl font-black tracking-normal leading-loose mb-2 overflow-hidden text-ellipsis py-1">{current.title}</h2>
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] font-bold uppercase tracking-wider text-slate-300 border border-white/10">
+            Scanning Radius: 20KM
+          </div>
         </div>
       </div>
 

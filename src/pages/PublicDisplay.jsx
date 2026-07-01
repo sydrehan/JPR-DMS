@@ -5,13 +5,12 @@ import { SafetyCategories } from '../components/PublicDisplay/SafetyCategories';
 import { DisasterMap } from '../components/Map/DisasterMap';
 import { EmergencyContactsModal } from '../components/PublicDisplay/EmergencyContactsModal';
 import { fetchDisasterAlerts } from '../services/disasterService';
-import { MonitorPlay, AlertTriangle, Shield, Phone, Activity, User, Home, BookOpen, Video, Layout, Sparkles } from 'lucide-react';
+import { MonitorPlay, AlertTriangle, Shield, Phone, Activity, User, Home, BookOpen, Video, Layout } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from '../components/Layout/ThemeToggle';
 import { MobileBottomNav } from '../components/Layout/MobileBottomNav';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '../components/Layout/LanguageSwitcher';
-import { AiAssistantModal } from '../components/PublicDisplay/AiAssistantModal';
 
 export const PublicDisplay = () => {
   const [time, setTime] = useState(new Date());
@@ -19,7 +18,6 @@ export const PublicDisplay = () => {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showContacts, setShowContacts] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -72,13 +70,6 @@ export const PublicDisplay = () => {
           </Link>
           <button onClick={() => setShowContacts(true)} className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-bold whitespace-nowrap transition-all border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600">
             {t('nav.contacts')}
-          </button>
-          <button 
-            onClick={() => setIsChatOpen(true)}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold whitespace-nowrap transition-all shadow-lg shadow-blue-500/20 flex items-center gap-1.5"
-          >
-            <Sparkles className="w-4 h-4" />
-            AI Assistant
           </button>
           <button 
             onClick={() => document.getElementById('live-alerts-feed')?.scrollIntoView({ behavior: 'smooth' })}
@@ -227,27 +218,6 @@ export const PublicDisplay = () => {
         </div>
       </main>
       <EmergencyContactsModal isOpen={showContacts} onClose={() => setShowContacts(false)} />
-
-      {/* Floating AI Mascot Button */}
-      <button 
-        onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-20 right-6 z-50 p-3 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-full transition-all shadow-2xl flex items-center gap-2 group cursor-pointer border border-slate-700/50 hover:scale-105"
-      >
-        <div className="relative">
-          <img 
-            src="/resq_assistant.png" 
-            alt="Mascot" 
-            className="w-8 h-8 object-contain"
-            onError={(e) => { e.target.src = 'https://raw.githubusercontent.com/lucide-react/lucide/main/icons/bot.svg'; }}
-          />
-          <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-slate-900 dark:border-slate-800 rounded-full"></span>
-        </div>
-        <span className="text-xs font-bold tracking-wider max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-out whitespace-nowrap">
-          ASK RESQ AI
-        </span>
-      </button>
-
-      <AiAssistantModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
 
       <MobileBottomNav active="home" />
     </div>

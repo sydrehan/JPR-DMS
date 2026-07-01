@@ -41,7 +41,7 @@ const getSafetyGuide = (type) => {
 };
 
 // Fetch Helper with timeout and retries
-const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutMs = 15000) => {
+const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutMs = 8000) => {
   for (let attempt = 1; attempt <= retries; attempt++) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -49,11 +49,7 @@ const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutM
     try {
       const response = await fetch(url, {
         ...options,
-        signal: controller.signal,
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          ...(options.headers || {})
-        }
+        signal: controller.signal
       });
       clearTimeout(id);
 
@@ -71,67 +67,6 @@ const fetchWithRetryAndTimeout = async (url, options = {}, retries = 3, timeoutM
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
-};
-
-// AI Batch Translation and Summarization
-const translateAndSummarizeAlerts = async (alerts) => {
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-  if (!GEMINI_API_KEY) return alerts;
-
-  try {
-    // Only process the first 10 alerts to prevent hitting rate limits
-    const alertsToProcess = alerts.slice(0, 10).map((a, i) => ({
-      index: i,
-      title: a.title,
-      description: a.description
-    }));
-
-    const prompt = `You are a professional emergency responder AI. Translate the following regional Indian disaster alerts into a highly concise, single-sentence English summary (TL;DR) that focuses strictly on the immediate hazard, actions to take, and locations. 
-Input JSON array:
-${JSON.stringify(alertsToProcess)}
-
-Return your output ONLY as a valid JSON array of objects with "index" and "summary" keys. Do not include markdown blocks or any other characters.
-Example output:
-[{"index": 0, "summary": "Heavy rainfall predicted in Bastar district. Stay indoors."}]`;
-
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 6000); // 6s timeout for AI
-
-    const response = await fetch(GEMINI_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: {
-          responseMimeType: "application/json",
-          maxOutputTokens: 800
-        }
-      })
-    });
-    clearTimeout(id);
-
-    if (!response.ok) throw new Error("Gemini batch translation call failed");
-
-    const data = await response.json();
-    const rawResultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!rawResultText) throw new Error("Empty Gemini response");
-
-    const parsedSummaries = JSON.parse(rawResultText);
-    if (Array.isArray(parsedSummaries)) {
-      parsedSummaries.forEach(item => {
-        if (alerts[item.index]) {
-          alerts[item.index].description = `[AI Summary: ${item.summary}] ${alerts[item.index].description}`;
-        }
-      });
-    }
-  } catch (error) {
-    console.warn("Skipping AI summarization/translation due to error:", error.message);
-  }
-  return alerts;
 };
 
 export default async function handler(req, res) {
@@ -156,7 +91,7 @@ export default async function handler(req, res) {
     }
 
     // Normalize NDMA Sachet Alerts
-    let normalizedAlerts = rawAlerts.map(alert => {
+    const normalizedAlerts = rawAlerts.map(alert => {
       // 1. Extract lat/lng from centroid
       let lat = 20.5937; // Fallback to center of India
       let lng = 78.9629;
@@ -221,9 +156,6 @@ export default async function handler(req, res) {
         safety_guide: getSafetyGuide(type)
       };
     });
-
-    // Run AI Translation & Summarization batch on the normalized alerts
-    normalizedAlerts = await translateAndSummarizeAlerts(normalizedAlerts);
 
     // Save to Cache
     cache = {
