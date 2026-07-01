@@ -1,0 +1,263 @@
+{
+  "onboarding": {
+    "language": {
+      "title": "Choose your Language",
+      "desc": "Select your preferred language to continue."
+    },
+    "intro": {
+      "title": "Welcome to",
+      "desc": "I am here to help you stay safe. This platform provides real-time alerts, disaster guides, and emergency contacts for your village and family.",
+      "button": "Show me around"
+    },
+    "dashboard": {
+      "title": "Live Dashboard",
+      "desc": "This is your main view. The big card shows your Current Safety Status. If there is any danger nearby, it will turn RED and tell you exactly what to do."
+    },
+    "alerts": {
+      "title": "Real-Time Alerts",
+      "desc": "We monitor satellites and ground sensors 24/7. Any urgent warnings for your location will appear in the Live Alerts Feed instantly."
+    },
+    "safety": {
+      "title": "Survival Guides",
+      "desc": "Access complete safety manuals for Earthquakes, Floods, and Cyclones. Learn what to do Before, During, and After a disaster."
+    },
+    "end": {
+      "title": "You are all set!",
+      "desc": "Explore the app freely. If you ever need help, look for the \"Help\" section. Stay safe!",
+      "button": "Get Started"
+    }
+  },
+  "common": {
+    "next": "Next",
+    "got_it": "Got it"
+  },
+  "nav": {
+    "drills": "Mock Drills",
+    "videos": "Safety Videos",
+    "guide": "Awareness",
+    "contacts": "Emergency Contacts",
+    "alerts": "Live Alerts",
+    "home": "Home",
+    "help": "Help"
+  },
+  "header": {
+    "citizen": "Citizen User",
+    "location": "Chennai, IN"
+  },
+  "status": {
+    "safe": "YOU ARE SAFE",
+    "risk": "AT RISK",
+    "safe_desc": "No threats detected near",
+    "danger_title": "DANGER",
+    "danger_desc": "IMMEDIATE THREAT:",
+    "unknown_danger": "Unknown Danger"
+  },
+  "categories": {
+    "title": "Safety Categories",
+    "flood": "Flood",
+    "flood_desc": "Stay prepared for flood risks.",
+    "earthquake": "Earthquake",
+    "earthquake_desc": "Understand earthquake safety protocols.",
+    "cyclone": "Cyclone",
+    "cyclone_desc": "Track cyclone movement and alerts.",
+    "routes": "Evacuation Routes",
+    "routes_desc": "Find safe evacuation paths."
+  },
+  "dashboard": {
+    "quick_actions": "Quick Actions",
+    "take_drill": "Take Mock Drill",
+    "watch_video": "Watch Safety Video",
+    "view_contacts": "View Emergency Contacts",
+    "live_alerts_ticker": "LIVE ALERTS",
+    "no_active_ticker": "NO ACTIVE MAJOR ALERTS • MONITORING SYSTEMS ACTIVE • STAY SAFE",
+    "total_alerts": "Total Alerts",
+    "safe_zones": "Safe Zones",
+    "live_alerts_feed": "Live Alerts Feed",
+    "no_alerts_feed": "No active alerts in your network."
+  },
+  "drills": {
+    "title": "Training & Mock Drills",
+    "subtitle": "Enhance your preparedness with interactive drills and guides.",
+    "guest_mode": "Guest User",
+    "change_user": "Change User",
+    "back_web": "Back to Website",
+    "online_quiz": "Online Quiz",
+    "offline_drills": "Offline Drills",
+    "start_drill": "Start Drill",
+    "back_drills": "Back to Drills",
+    "completed": "Quiz Completed!",
+    "score": "You scored {{score}} out of {{total}}",
+    "time": "Time Taken",
+    "back_menu": "Back to Menu",
+    "analysis": "Preparedness Analysis",
+    "guest_access": "Mock Drill Access",
+    "enter_name": "Enter your name to start the training session as a guest.",
+    "your_name": "Your Name",
+    "start_training": "Start Training",
+    "cancel": "Cancel & Return to Website"
+  },
+  "awareness": {
+    "title": "Public Awareness & Safety Guide",
+    "hero_title": "Emergency Preparedness Protocol",
+    "hero_desc": "Understanding disaster protocols saves lives. Select a category below to view detailed safety guidelines.",
+    "library": "Disaster Protocols Library",
+    "view_guide": "View Complete Guide",
+    "source": "These guidelines are sourced from National Disaster Management Authority (NDMA) protocols.",
+    "immediate": "Immediate Action",
+    "before": "Before",
+    "during": "During",
+    "after": "After",
+    "dos": "DO's",
+    "donts": "DON'Ts"
+  },
+  "disasters": {
+    "cyclone": {
+      "title": "Cyclones",
+      "desc": "Stay indoors, keep emergency kit ready, and listen to radio updates.",
+      "content": {
+        "immediate": "Stay indoors and away from windows. Listen to official radio/TV broadcasts.",
+        "before": [
+          "Inspect your house and secure loose tiles, windows, and doors.",
+          "Trim trees branches that could fall on your house.",
+          "Keep an emergency kit ready with food, water, and medicines.",
+          "Identify safe shelters in your area."
+        ],
+        "during": [
+          "Switch off electrical mains and gas supply.",
+          "Keep doors and windows shut.",
+          "Drink boiled or chlorinated water.",
+          "Do not venture out until officially advised."
+        ],
+        "after": [
+          "Do not touch loose or dangling power wires.",
+          "Check for gas leaks before using the stove.",
+          "Clear debris from your premises carefully.",
+          "Report specific damages to authorities."
+        ],
+        "dos": ["Keep mobile phones charged", "Keep essential documents in waterproof bags", "Follow official warnings"],
+        "donts": ["Do not ignore warnings", "Do not spread rumors", "Do not go near the sea"]
+      }
+    },
+    "earthquake": {
+      "title": "Earthquakes",
+      "desc": "Drop, Cover, and Hold On. Stay away from windows and heavy furniture.",
+      "content": {
+        "immediate": "DROP to the ground; take COVER by getting under a sturdy table or other piece of furniture; and HOLD ON until the shaking stops.",
+        "before": [
+          "Secure heavy furniture like cupboards and bookshelves to the wall.",
+          "Identify safe spots in each room (under sturdy tables).",
+          "Practice 'Drop, Cover, and Hold On' drills with family."
+        ],
+        "during": [
+          "If indoors, stay there. Get under a desk or table.",
+          "Stay away from glass, windows, outside doors and walls.",
+          "If outdoors, move away from buildings, streetlights, and utility wires.",
+          "If in a moving vehicle, stop as quickly as safety permits and stay in the vehicle."
+        ],
+        "after": [
+          "Expect aftershocks.",
+          "Check yourself and others for injuries.",
+          "Check for fire hazards.",
+          "If you are trapped, do not light a match. Cover your mouth with a cloth."
+        ],
+        "dos": ["Stay calm", "Help the injured if safe", "Listen to radio for updates"],
+        "donts": ["Do not use elevators", "Do not rush to the exit", "Do not light matches"]
+      }
+    },
+    "lightning": {
+      "title": "Lightning",
+      "desc": "Avoid open fields, tall trees, and water bodies. Unplug electronics.",
+      "content": {
+        "immediate": "Seek shelter in a substantial building or fully enclosed metal-topped vehicle.",
+        "before": [
+          "Check weather forecasts before outdoor activities.",
+          "Install surge protectors for expensive electronics."
+        ],
+        "during": [
+          "Avoid open fields, the top of a hill or a ridge top.",
+          "Stay away from tall, isolated trees or other tall objects.",
+          "If you are in a forest, stay near a lower stand of trees.",
+          "If you are in a group, spread out to avoid the current traveling between group members."
+        ],
+        "after": [
+          "Wait at least 30 minutes after the last thunder before leaving shelter.",
+          "Stay away from storm-damaged areas."
+        ],
+        "dos": ["Unplug appliances", "Avoid plumbing and water", "Stay indoors"],
+        "donts": ["Do not lie flat on the ground", "Do not use corded phones", "Do not stand near windows"]
+      }
+    },
+    "flood": {
+      "title": "Floods",
+      "desc": "Move to higher ground. Do not walk or drive through flood waters.",
+      "content": {
+        "immediate": "Move to higher ground immediately. Do not attempt to walk, swim, or drive through floodwaters.",
+        "before": [
+          "Know the flood risk in your area.",
+          "Keep sandbags ready if you live in a low-lying area.",
+          "Elevate furnace, water heater, and electric panel if susceptible to flooding."
+        ],
+        "during": [
+          "Listen to the radio or television for information.",
+          "Turn off utilities at usage if told to do so.",
+          "Do not walk through moving water. Six inches is enough to knock you down.",
+          "Do not drive into flooded areas."
+        ],
+        "after": [
+          "Avoid floodwaters; water may be contaminated by oil, gasoline, or raw sewage.",
+          "Be aware of areas where floodwaters have receded.",
+          "Clean and disinfect everything that got wet."
+        ],
+        "dos": ["Move to higher floors", "Keep a stick to check water depth", "Drink boiled water"],
+        "donts": ["Do not drive through floods", "Do not touch electrical equipment if wet", "Do not eat food exposed to flood water"]
+      }
+    },
+    "fire": {
+      "title": "Fire Safety",
+      "desc": "Crawl low under smoke. Stop, Drop, and Roll if clothes catch fire.",
+      "content": {
+        "immediate": "Get out, stay out, and call for help. Do not go back inside for anything.",
+        "before": [
+          "Install smoke alarms on every level of your home.",
+          "Plan two ways out of every room.",
+          "Keep a fire extinguisher in the kitchen."
+        ],
+        "during": [
+          "Crawl low under smoke to your exit.",
+          "Check doors for heat before opening.",
+          "If your clothes catch fire: Stop, Drop, and Roll."
+        ],
+        "after": [
+          "Call the fire department if you haven't already.",
+          "Treat burns immediately with cool water.",
+          "Do not re-enter the building until authorities say it is safe."
+        ],
+        "dos": ["Crawl low under smoke", "Test door handles for heat", "Use stairs, not elevators"],
+        "donts": ["Do not hide in closets or under beds", "Do not go back for pets or valuables", "Do not open hot doors"]
+      }
+    },
+    "landslide": {
+      "title": "Landslides",
+      "desc": "Stay alert during heavy rain. Move away from the path of the slide.",
+      "content": {
+        "immediate": "Move away from the path of the landslide or debris flow as quickly as possible.",
+        "before": [
+          "Avoid building near steep slopes, close to mountain edges, or near natural erosion valleys.",
+          "Get a ground assessment of your property."
+        ],
+        "during": [
+          "Stay awake and alert during severe storms.",
+          "Listen for unusual sounds containing trees cracking or boulders knocking together.",
+          "Move to the second story if possible if you are near a stream or channel."
+        ],
+        "after": [
+          "Stay away from the slide area. There may be danger of additional slides.",
+          "Check for injured and trapped persons near the slide, without entering the direct slide area.",
+          "Look for and report broken utility lines."
+        ],
+        "dos": ["Move to high ground", "Listen for rumbling sounds", "Curl into a ball if trapped"],
+        "donts": ["Do not cross flood waters", "Do not drive relative to the slide path", "Do not return home until safe"]
+      }
+    }
+  }
+}
